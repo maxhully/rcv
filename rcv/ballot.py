@@ -16,13 +16,20 @@ class Ballot(tuple):
         return self[0]
 
     @property
+    def next_choice(self):
+        return self[1]
+
+    @property
     def is_empty(self):
         return len(self) == 0
 
 
 class BallotSet(WeightedSet):
-    def __init__(self, weighted_items):
-        super().__init__((Ballot(item), weight) for item, weight in weighted_items)
+    def __init__(self, weighted_items=None):
+        if weighted_items is not None:
+            super().__init__((Ballot(item), weight) for item, weight in weighted_items)
+        else:
+            super().__init__()
 
     def eliminate(self, eliminated_candidate):
         return self.__class__(
