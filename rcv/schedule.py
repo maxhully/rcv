@@ -1,4 +1,5 @@
-from .ballot import WeightedBallot
+from .ballot import Ballot
+from .weighted_set import WeightedSet
 
 
 class PreferenceSchedule:
@@ -18,7 +19,9 @@ class PreferenceSchedule:
         the second is the second-ranked candidate, and so on."""
         grouped_ballots = df.groupby(list(df.columns)).size().items()
 
-        ballots = [WeightedBallot(ranking, count) for ranking, count in grouped_ballots]
+        ballots = WeightedSet(
+            (Ballot(ranking), count) for ranking, count in grouped_ballots
+        )
 
         candidates = set(df.values.ravel())
         return cls(ballots, candidates)

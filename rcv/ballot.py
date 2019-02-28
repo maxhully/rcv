@@ -1,39 +1,31 @@
-class WeightedBallot:
-    def __init__(self, preferences, weight):
-        self.preferences = list(preferences)
-        self.weight = weight
+from .weighted_set import WeightedSet
 
+
+class Ballot(tuple):
     def __repr__(self):
-        names = "({})".format(", ".join(map(str, self.preferences)))
-        return "<WeightedBallot {} weight={}>".format(names, self.weight)
+        names = "({})".format(", ".join(map(str, self)))
+        return "<Ballot {}>".format(names)
 
-    def __len__(self):
-        return len(self.preferences)
-
-    def __iter__(self):
-        return iter(self.preferences)
-
-    def eliminate(self, candidate):
-        self.preferences.remove(candidate)
+    def eliminate(self, eliminated_candidate):
+        return self.__class__(
+            candidate for candidate in self if candidate != eliminated_candidate
+        )
 
     @property
     def top_choice(self):
-        return self.preferences[0]
+        return self[0]
 
     @property
     def is_empty(self):
         return len(self) == 0
 
-    def __imul__(self, multiplier):
-        self.weight *= multiplier
-        return self
 
-    def __eq__(self, ballot):
-        return (
-            len(ballot) == len(self)
-            and all(left == right for left, right in zip(self, ballot))
-            and ballot.weight == self.weight
+class BallotSet(WeightedSet):
+    def __init__(self, weighted_items):
+        super().__init__((Ballot(item), weight) for item, weight in weighted_items)
+
+    def eliminate(self, eliminated_candidate):
+        return self.__class__(
+            (ballot.eliminate(eliminated_candidate), weight)
+            for (ballot, weight) in self
         )
-
-    def __hash__(self):
-        return hash((tuple(self), self.weight))
