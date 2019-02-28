@@ -1,6 +1,5 @@
 from collections import defaultdict
 from .ballot import BallotSet
-from fractions import Fraction
 
 
 class Candidate:
@@ -9,7 +8,7 @@ class Candidate:
         self.votes = votes
 
     def __repr__(self):
-        return "<Candidate {} with {} votes>".format(self.name, len(self.votes))
+        return "<Candidate {} with {} votes>".format(self.name, self.total_votes)
 
     def __str__(self):
         return self.name
@@ -17,12 +16,17 @@ class Candidate:
     def __hash__(self):
         return hash(self.name)
 
+    @property
+    def total_votes(self):
+        return self.votes.total_weight
+
     def transferable_votes(self, quota):
         transferable = defaultdict(BallotSet)
-        if len(self.votes) <= quota:
+        total = self.total_votes
+        if total <= quota:
             return transferable
 
-        fraction = Fraction(len(self.votes) - quota, len(self.votes))
+        fraction = (total - quota) / total
 
         for vote, count in self.votes:
             next_choice = vote.next_choice

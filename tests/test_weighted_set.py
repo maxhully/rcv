@@ -13,8 +13,8 @@ class TestWeightedSet:
     def test_can_be_created(self, weighted_set):
         assert weighted_set
 
-    def test_length_is_total_weight(self, weighted_set):
-        assert len(weighted_set) == 26
+    def test_has_total_weight(self, weighted_set):
+        assert weighted_set.total_weight == 26
 
     def test_can_change_weight_with_multiplication(self, weighted_set):
         weighted_set *= 4
