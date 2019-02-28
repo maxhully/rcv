@@ -1,7 +1,7 @@
-from numbers import Number
 from collections import defaultdict
-from itertools import repeat
 from fractions import Fraction
+from itertools import repeat
+from numbers import Number
 
 
 class WeightedSet:
@@ -18,6 +18,10 @@ class WeightedSet:
         )
         return "<{} {}>".format(self.__class__.__name__, items)
 
+    @property
+    def is_empty(self):
+        return self.total_weight == 0
+
     def add(self, item, weight=1):
         self._weights[item] += Fraction(weight)
 
@@ -30,7 +34,9 @@ class WeightedSet:
         return sum(self._weights.values())
 
     def __iter__(self):
-        return iter(self._weights.items())
+        for item, weight in self._weights.items():
+            if weight > 0:
+                yield item, weight
 
     def __eq__(self, other):
         return set(self) == set(other)

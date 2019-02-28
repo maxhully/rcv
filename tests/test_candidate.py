@@ -1,13 +1,4 @@
-import pytest
-from rcv.candidate import Candidate
 from rcv.ballot import BallotSet
-
-
-@pytest.fixture
-def candidate():
-    ballots = BallotSet([(("Amy", "Elizabeth", "Kamala"), 10), (("Amy", "Kamala"), 5)])
-    amy = Candidate("Amy", ballots)
-    return amy
 
 
 class TestCandidate:
@@ -29,21 +20,17 @@ class TestCandidate:
 
         total_votes = candidate.total_votes
         surplus = total_votes - quota
-        expected = {
-            "Elizabeth": BallotSet(
-                [(("Amy", "Elizabeth", "Kamala"), 10 * surplus / total_votes)]
-            ),
-            "Kamala": BallotSet([(("Amy", "Kamala"), 5 * surplus / total_votes)]),
-        }
+        expected = BallotSet(
+            [
+                (("Elizabeth", "Kamala"), 10 * surplus / total_votes),
+                (("Kamala",), 5 * surplus / total_votes),
+            ]
+        )
 
-        assert set(expected.keys()) == set(transferable.keys())
-        for key in expected:
-            print(transferable[key], expected[key])
-            assert transferable[key] == expected[key]
+        assert transferable == expected
 
     def test_transferable_votes_is_empty_if_less_than_quota(self, candidate):
         quota = 1000
         transferable = candidate.transferable_votes(quota)
-        
-        assert len(transferable) == 0
-        assert isinstance(transferable, dict)
+
+        assert transferable.is_empty

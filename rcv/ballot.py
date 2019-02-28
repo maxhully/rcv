@@ -8,15 +8,21 @@ class Ballot(tuple):
 
     def eliminate(self, eliminated_candidate):
         return self.__class__(
-            candidate for candidate in self if candidate != eliminated_candidate
+            candidate
+            for candidate in self
+            if str(candidate) != str(eliminated_candidate)
         )
 
     @property
     def top_choice(self):
+        if len(self) == 0:
+            return None
         return self[0]
 
     @property
     def next_choice(self):
+        if len(self) < 2:
+            return None
         return self[1]
 
     @property

@@ -19,6 +19,12 @@ class TestBallot:
     def test_has_next_choice_property(self, ballot):
         assert ballot.next_choice == "Elizabeth"
 
+    def test_top_choice_is_none_for_empty_ballot(self):
+        assert Ballot().top_choice is None
+
+    def test_next_choice_is_none_for_ballots_with_one_name(self):
+        assert Ballot(["Kamala"]).next_choice is None
+
 
 class TestBallotSet:
     def test_can_eliminate_candidate(self, ballot_set):
