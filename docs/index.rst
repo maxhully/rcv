@@ -12,8 +12,8 @@ rcv
 ``rcv`` is a Python library for tabulating ballots from ranked-choice elections.
 The package is distributed under the BSD 3-Clause License.
 
-Examples
-========
+Example
+=======
 
 .. code-block:: python
 
@@ -29,10 +29,3 @@ Examples
     winners = stv.elect()
 
     assert winners == {"Kamala", "Elizabeth"}
-
-
-API Reference
-=============
-
-.. automodule:: rcv
-    :members:
