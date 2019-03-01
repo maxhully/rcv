@@ -5,7 +5,6 @@ from .ballot import BallotSet
 
 
 def find_winners(candidates, quota):
-    print(candidates, quota)
     return {candidate for candidate in candidates if candidate.total_votes >= quota}
 
 
@@ -41,6 +40,9 @@ class FractionalSTV:
     def elect(self):
         while len(self.elected) < self.seats:
             winners = find_winners(self.candidates, self.quota)
+            print(self.quota)
+            print([candidate.total_votes for candidate in self.candidates])
+            print(winners)
             if len(winners) > 0:
                 for winner in winners:
                     yield str(winner)

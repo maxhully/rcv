@@ -1,4 +1,4 @@
-from rcv.ballot import BallotSet
+from rcv.candidate import Candidate
 
 
 class TestCandidate:
@@ -13,3 +13,6 @@ class TestCandidate:
 
     def test_hash_by_name(self, candidate):
         assert hash(candidate) == hash("Amy")
+
+    def test_name_is_str(self):
+        assert Candidate(10).name == "10"

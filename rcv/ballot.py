@@ -17,13 +17,13 @@ class Ballot(tuple):
     def top_choice(self):
         if len(self) == 0:
             return None
-        return self[0]
+        return str(self[0])
 
     @property
     def next_choice(self):
         if len(self) < 2:
             return None
-        return self[1]
+        return str(self[1])
 
     @property
     def is_empty(self):

@@ -3,7 +3,7 @@ from .ballot import BallotSet
 
 class Candidate:
     def __init__(self, name, votes=None):
-        self.name = name
+        self.name = str(name)
         self.votes = BallotSet(votes)
 
     def __repr__(self):
