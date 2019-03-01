@@ -39,17 +39,18 @@ class FractionalSTV:
 
     def elect(self):
         while len(self.elected) < self.seats:
+            if len(self.candidates) + len(self.elected) == self.seats:
+                return {
+                    str(candidate) for candidate in self.elected.union(self.candidates)
+                }
             winners = find_winners(self.candidates, self.quota)
-            print(self.quota)
-            print([candidate.total_votes for candidate in self.candidates])
-            print(winners)
             if len(winners) > 0:
                 for winner in winners:
-                    yield str(winner)
                     self.declare_winner(winner)
             else:
                 least = find_least(self.candidates)
                 self.schedule.eliminate(least)
+        return {str(candidate) for candidate in self.elected}
 
     def declare_winner(self, winner):
         ballots_to_transfer = self.transferable_votes(winner)

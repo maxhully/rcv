@@ -1,6 +1,9 @@
 from numbers import Number
 
+import pandas
+
 from rcv import PreferenceSchedule
+from rcv.schedule import normalize_preferences
 from rcv.ballot import Ballot
 from rcv.candidate import Candidate
 
@@ -33,3 +36,29 @@ class TestPreferenceSchedule:
         for candidate in schedule.candidates:
             for ballot, weight in candidate.votes:
                 assert str(elizabeth) not in ballot
+
+
+class TestNormalizePreferences:
+    def test_removes_duplicates(self):
+        prefs = ["A", "A", "B"]
+        result = normalize_preferences(prefs)
+        assert result == ["A", "B"]
+
+    def test_skips_falsy_values(self):
+        assert normalize_preferences([None, None, "Amy", 0]) == ["Amy"]
+
+    def test_can_normalize_a_dataframe(self):
+        df = pandas.DataFrame(
+            {
+                "first": [None, "Amy", "Amy", "Kamala"],
+                "second": ["Elizabeth", "Elizabeth", "Amy", "Amy"],
+                "third": ["Kamala", "Kamala", "Elizabeth", "Elizabeth"],
+            }
+        )
+        schedule = PreferenceSchedule.from_dataframe(df)
+        assert set(schedule) == {
+            (("Elizabeth", "Kamala"), 1),
+            (("Amy", "Elizabeth", "Kamala"), 1),
+            (("Amy", "Elizabeth"), 1),
+            (("Kamala", "Amy", "Elizabeth"), 1),
+        }

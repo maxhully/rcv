@@ -29,7 +29,7 @@ class TestFractionalSTV:
     def test_elect(self, ballots):
         stv = FractionalSTV(ballots, seats=2, quota=droop_quota)
         winners = stv.elect()
-        assert list(winners) == ["Amy", "Kamala"]
+        assert set(winners) == {"Amy", "Kamala"}
 
     def test_can_find_candidates_from_ballots(self, stv):
         assert len(stv.candidates) == 3
@@ -65,9 +65,6 @@ class TestFractionalSTV:
             ]
         )
 
-        print(expected)
-        print(transferable)
-
         assert transferable == expected
 
     def test_transferable_votes_is_empty_if_less_than_quota(self, ballots):
@@ -84,6 +81,16 @@ class TestFractionalSTV:
     def test_can_handle_multiple_winners_in_first_round(self, ballots):
         stv = FractionalSTV(ballots, seats=3)
         assert set(stv.elect()) == {"Amy", "Elizabeth", "Kamala"}
+
+    def test_one_candidate(self, ballots):
+        stv = FractionalSTV(BallotSet({(("Single Candidate",), 10)}), seats=1)
+        assert set(stv.elect()) == {"Single Candidate"}
+
+    def test_two_candidates_but_one_does_not_meet_threshold(self, ballots):
+        stv = FractionalSTV(
+            BallotSet({(("Candidate A",), 100), (("Candidate B",), 1)}), seats=2
+        )
+        assert set(stv.elect()) == {"Candidate A", "Candidate B"}
 
     def test_against_real_data(self):
         ballots = BallotSet(
@@ -148,4 +155,4 @@ class TestFractionalSTV:
         )
         stv = FractionalSTV(ballots, seats=4)
 
-        assert list(stv.elect()) == ["393", "399", "397", "402"]
+        assert stv.elect() == {"393", "399", "397", "402"}

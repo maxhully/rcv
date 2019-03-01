@@ -17,9 +17,8 @@ class PreferenceSchedule:
         self.total_votes = sum(candidate.total_votes for candidate in self.candidates)
 
     def __iter__(self):
-        return self.ballots
+        return self.ballots()
 
-    @property
     def ballots(self):
         for candidate in self.candidates:
             for ballot in candidate.votes:
@@ -43,12 +42,37 @@ class PreferenceSchedule:
         self.remove_candidate(eliminated)
 
     @classmethod
+    def from_ballots(cls, items):
+        cls(BallotSet.from_items(items))
+
+    @classmethod
     def from_dataframe(cls, df):
         """Create a preference schedule from a dataframe whose rows are ballots.
         That is, the first column is the first-ranked candidate for each ballot,
-        the second is the second-ranked candidate, and so on."""
+        the second is the second-ranked candidate, and so on.
+
+        The preference orders are cleaned using :func:`normalize_preferences`.
+        """
+        if df.isna().any().any():
+            df = df.fillna(False)
+
         grouped_ballots = df.groupby(list(df.columns)).size().items()
 
-        ballots = BallotSet(grouped_ballots)
+        return cls(
+            BallotSet(
+                (
+                    (normalize_preferences(ballot), count)
+                    for ballot, count in grouped_ballots
+                )
+            )
+        )
 
-        return cls(ballots)
+
+def normalize_preferences(choices):
+    """Removes duplicates and drops falsy values from a single preference orders."""
+    print(choices)
+    new_choices = []
+    for choice in choices:
+        if choice and (choice not in new_choices):
+            new_choices.append(choice)
+    return new_choices
