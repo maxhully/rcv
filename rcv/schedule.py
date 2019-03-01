@@ -113,7 +113,6 @@ class PreferenceSchedule:
 
 def normalize_preferences(choices):
     """Removes duplicates and drops falsy values from a single preference order."""
-    print(choices)
     new_choices = []
     for choice in choices:
         if choice and (choice not in new_choices):
