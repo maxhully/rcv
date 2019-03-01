@@ -6,7 +6,7 @@ install:
     - pip install codecov
     - pip install -U pytest
     - pip install -U pytest-cov
-    - python setup.py install
+    - pip install -e .[test]
 
 script:
     - pytest tests --cov=rcv --cov-report term-missing --doctest-modules
