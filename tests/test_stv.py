@@ -1,23 +1,6 @@
-import pytest
-
-from rcv.ballot import BallotSet
 from rcv.candidate import Candidate
+from rcv.schedule import PreferenceSchedule
 from rcv.stv import FractionalSTV, droop_quota, find_winners
-
-
-@pytest.fixture
-def ballots():
-    ballots = BallotSet(
-        {
-            (("Amy", "Elizabeth", "Kamala"), 20),
-            (("Amy", "Kamala"), 5),
-            (("Kamala",), 10),
-            (("Kamala", "Elizabeth", "Amy"), 10),
-            (("Elizabeth", "Amy"), 12),
-            (("Elizabeth", "Kamala", "Amy"), 4),
-        }
-    )
-    return ballots
 
 
 def test_find_winners(candidates):
@@ -52,23 +35,13 @@ class TestFractionalSTV:
         amy = Candidate("Amy")
         kamala = Candidate("Kamala")
         elizabeth = Candidate("Elizabeth")
+        schedule = PreferenceSchedule(ballots, candidates={amy, kamala, elizabeth})
+        stv = FractionalSTV(schedule)
 
-        stv = FractionalSTV(ballots, candidates={amy, kamala, elizabeth})
         stv.declare_winner(amy, 21)
 
         assert amy.votes.is_empty
         assert amy in stv.elected
-        assert str(amy) not in stv._candidates_by_name
+        assert amy not in stv.candidates
 
         assert kamala.total_votes > 20
-
-    def test_eliminate(self, ballots):
-        amy = Candidate("Amy")
-        kamala = Candidate("Kamala")
-        elizabeth = Candidate("Elizabeth")
-
-        stv = FractionalSTV(ballots, candidates={amy, kamala, elizabeth})
-        stv.eliminate(elizabeth)
-        for candidate in stv.candidates:
-            for ballot, weight in candidate.votes:
-                assert str(elizabeth) not in ballot

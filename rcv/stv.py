@@ -1,7 +1,6 @@
 import math
 
-from .ballot import BallotSet
-from .candidate import Candidate
+from .schedule import PreferenceSchedule
 
 
 def find_winners(candidates, quota):
@@ -23,21 +22,17 @@ def droop_quota(number_of_votes, number_of_seats):
 
 
 class FractionalSTV:
-    def __init__(self, ballots, candidates=None, quota=droop_quota):
+    def __init__(self, schedule, quota=droop_quota):
+        if not isinstance(schedule, PreferenceSchedule):
+            schedule = PreferenceSchedule(schedule)
         self.quota_func = quota
-
-        if candidates is None:
-            names = {name for ballot, weight in ballots for name in ballot}
-            candidates = {Candidate(name) for name in names}
-
-        self.candidates = set(candidates)
-        self._candidates_by_name = {
-            str(candidate): candidate for candidate in self.candidates
-        }
-
-        self.distribute_ballots(ballots)
-        self.total_votes = sum(candidate.total_votes for candidate in self.candidates)
+        self.schedule = schedule
+        self.total_votes = schedule.total_votes
         self.elected = set()
+
+    @property
+    def candidates(self):
+        return self.schedule.candidates
 
     def elect(self, seats):
         quota = self.quota_func(self.total_votes, seats)
@@ -49,27 +44,9 @@ class FractionalSTV:
                     self.declare_winner(winner, quota)
             else:
                 least = find_least(self.candidates)
-                self.eliminate(least)
+                self.schedule.eliminate(least)
 
     def declare_winner(self, winner, quota):
-        self.distribute_ballots(winner.transferable_votes(quota))
-        winner.votes = BallotSet()
+        self.schedule.distribute_ballots(winner.transferable_votes(quota))
         self.elected.add(winner)
-        self.remove_candidate(winner)
-
-    def remove_candidate(self, removed):
-        for candidate in self.candidates:
-            if candidate is not removed:
-                candidate.votes = candidate.votes.eliminate(removed)
-        self.candidates.remove(removed)
-        del self._candidates_by_name[str(removed)]
-
-    def distribute_ballots(self, ballots):
-        for ballot, weight in ballots:
-            if not ballot.is_empty:
-                candidate = self._candidates_by_name[ballot.top_choice]
-                candidate.votes.add(ballot, weight)
-
-    def eliminate(self, eliminated):
-        self.distribute_ballots(eliminated.votes.eliminate(eliminated))
-        self.remove_candidate(eliminated)
+        self.schedule.remove_candidate(winner)

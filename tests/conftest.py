@@ -1,6 +1,6 @@
 import pandas
-import pytest
 
+import pytest
 from rcv import PreferenceSchedule
 from rcv.ballot import Ballot, BallotSet
 from rcv.candidate import Candidate
@@ -59,3 +59,18 @@ def candidates():
         "Elizabeth", [(("Elizabeth", "Amy"), 12), (("Elizabeth", "Kamala", "Amy"), 4)]
     )
     return {amy, kamala, elizabeth}
+
+
+@pytest.fixture
+def ballots():
+    ballots = BallotSet(
+        {
+            (("Amy", "Elizabeth", "Kamala"), 20),
+            (("Amy", "Kamala"), 5),
+            (("Kamala",), 10),
+            (("Kamala", "Elizabeth", "Amy"), 10),
+            (("Elizabeth", "Amy"), 12),
+            (("Elizabeth", "Kamala", "Amy"), 4),
+        }
+    )
+    return ballots

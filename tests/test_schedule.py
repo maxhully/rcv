@@ -1,6 +1,8 @@
-from rcv import PreferenceSchedule
-from rcv.schedule import Ballot
 from numbers import Number
+
+from rcv import PreferenceSchedule
+from rcv.ballot import Ballot
+from rcv.candidate import Candidate
 
 
 class TestPreferenceSchedule:
@@ -20,3 +22,14 @@ class TestPreferenceSchedule:
             (Ballot(("Elizabeth", "Kamala", "Amy")), 4),
             (Ballot(("Kamala", "Elizabeth", "Amy")), 2),
         }
+
+    def test_eliminate(self, ballots):
+        amy = Candidate("Amy")
+        kamala = Candidate("Kamala")
+        elizabeth = Candidate("Elizabeth")
+
+        schedule = PreferenceSchedule(ballots, candidates={amy, kamala, elizabeth})
+        schedule.eliminate(elizabeth)
+        for candidate in schedule.candidates:
+            for ballot, weight in candidate.votes:
+                assert str(elizabeth) not in ballot
