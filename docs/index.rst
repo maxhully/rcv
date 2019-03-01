@@ -11,6 +11,9 @@ rcv
 .. image:: https://readthedocs.org/projects/rcv-py/badge/?version=latest
     :target: https://rcv-py.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
+.. image:: https://badge.fury.io/py/rcv.svg
+    :target: https://https://pypi.org/project/rcv/
+    :alt: PyPI Package
 
 rcv is a Python library for tabulating ballots from ranked-choice elections.
 The package is distributed under the BSD 3-Clause License.
