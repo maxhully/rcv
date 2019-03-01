@@ -11,3 +11,21 @@ RCV
 
 RCV is a Python library for tabulating ballots from ranked-choice elections.
 The package is distributed under the BSD 3-Clause License.
+
+Usage
+=====
+
+.. code-block:: python
+
+    from rcv import FractionalSTV, PreferenceSchedule
+
+    schedule = PreferenceSchedule.from_ballots([
+        ("Kamala", "Amy", "Elizabeth"),
+        ("Kamala", "Elizabeth", "Amy"),
+        ("Kamala", "Elizabeth", "Amy"),
+    ])
+
+    stv = FractionalSTV(schedule, seats=2)
+    winners = stv.elect()
+
+    assert winners == {"Kamala", "Elizabeth"}

@@ -4,9 +4,46 @@ from .values_dict import ValuesDict
 
 
 class PreferenceSchedule:
-    """A reduced preference schedule"""
+    """A reduced preference schedule.
+
+    The :meth:`from_ballots` method can be useful for creating a preference
+    schedule from raw preference orderings:
+
+    >>> PreferenceSchedule.from_ballots([
+    ...     ("Amy", "Elizabeth", "Kirsten"),
+    ...     ("Amy", "Elizabeth", "Kirsten"),
+    ...     ("Amy", "Elizabeth", "Kirsten"),
+    ...     ("Kirsten", "Amy"),
+    ...     ("Elizabeth", "Kamala", "Kirsten"),
+    ...     ("Kamala", "Elizabeth"),
+    ...     ("Kamala", "Elizabeth"),
+    ...     ("Kamala", "Amy"),
+    ...     ("Kamala", "Amy"),
+    ... ])
+    <PreferenceSchedule total_votes=9>
+
+    You can also create the :class:`~rcv.BallotSet` beforehand and pass it
+    directly to the constructor:
+
+    >>> ballots = BallotSet({
+    ...     (("Amy", "Elizabeth", "Kirsten"), 10),
+    ...     (("Kirsten", "Amy"), 20),
+    ...     (("Elizabeth", "Kamala", "Kirsten"), 15),
+    ...     (("Kamala", "Elizabeth"), 16),
+    ...     (("Kamala", "Amy"), 14),
+    ... })
+    >>> PreferenceSchedule(ballots)
+    <PreferenceSchedule total_votes=75>
+    """
 
     def __init__(self, ballots, candidates=None):
+        """
+        :param ballots: the :class:`~rcv.BallotSet` holding all of the valid
+            ballots cast in the election
+        :param candidates: optionally, the :class:`Candidates <~rcv.Candidate>`
+            up for election. If not provided, the candidates will be inferred
+            from the names on the ballots.
+        """
         if candidates is None:
             names = {name for ballot, weight in ballots for name in ballot}
             candidates = {Candidate(name) for name in names}
@@ -16,9 +53,15 @@ class PreferenceSchedule:
         self.distribute_ballots(ballots)
         self.total_votes = sum(candidate.total_votes for candidate in self.candidates)
 
-    def __iter__(self):
-        return self.ballots()
+    def __repr__(self):
+        return "<{} total_votes={}>".format(
+            self.__class__.__name__, int(self.total_votes)
+        )
 
+    def __iter__(self):
+        return self.ballots
+
+    @property
     def ballots(self):
         for candidate in self.candidates:
             for ballot in candidate.votes:
@@ -43,7 +86,7 @@ class PreferenceSchedule:
 
     @classmethod
     def from_ballots(cls, items):
-        cls(BallotSet.from_items(items))
+        return cls(BallotSet.from_items(items))
 
     @classmethod
     def from_dataframe(cls, df):
@@ -69,7 +112,7 @@ class PreferenceSchedule:
 
 
 def normalize_preferences(choices):
-    """Removes duplicates and drops falsy values from a single preference orders."""
+    """Removes duplicates and drops falsy values from a single preference order."""
     print(choices)
     new_choices = []
     for choice in choices:

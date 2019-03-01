@@ -18,11 +18,40 @@ def find_least(candidates):
 
 
 def droop_quota(number_of_votes, number_of_seats):
+    """The `Droop quota`_ for Single Transferable Vote tabulation. A candidate
+    whose vote total meets this quota wins a seat.
+
+    .. _`Droop quota`: https://en.wikipedia.org/wiki/Droop_quota
+    """
     return math.floor(number_of_votes / (number_of_seats + 1)) + 1
 
 
 class FractionalSTV:
+    """Tabulates ranked-choice ballots according to Fractional Single
+    Transferable Vote rules.
+
+    >>> schedule = PreferenceSchedule.from_ballots([
+    ...     ("Kamala", "Amy", "Elizabeth"),
+    ...     ("Kamala", "Elizabeth", "Amy"),
+    ...     ("Kamala", "Elizabeth", "Amy"),
+    ... ])
+    >>> stv = FractionalSTV(schedule, seats=2)
+    >>> winners = stv.elect()
+    >>> winners == {"Kamala", "Elizabeth"}
+    True
+    """
+
     def __init__(self, schedule, seats, quota=droop_quota):
+        """
+        :param schedule: A :class:`~rcv.PreferenceSchedule` holding all the
+            ranked-choice ballots cast in the election.
+        :param seats: the number of seats up for election
+        :param quota: the quota that a candidate must meet to win a seat
+        :type schedule: PreferenceSchedule
+        :type seats: int
+        :type quota: function or Number
+        """
+
         if not isinstance(schedule, PreferenceSchedule):
             schedule = PreferenceSchedule(schedule)
         self.seats = seats
@@ -38,6 +67,13 @@ class FractionalSTV:
         return self.schedule.candidates
 
     def elect(self):
+        """Runs the Fractional Single Transferable Vote algorithm to
+        determine the winners of the election.
+
+        :returns: a set holding the names (as strings) of the elected
+            candidates.
+        :rtype: Set[str]
+        """
         while len(self.elected) < self.seats:
             if len(self.candidates) + len(self.elected) == self.seats:
                 return {

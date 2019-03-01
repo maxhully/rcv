@@ -9,7 +9,7 @@ install:
     - python setup.py install
 
 script:
-    - pytest --cov=spatial_ops tests/
+    - pytest tests --cov=rcv --cov-report term-missing --doctest-modules
 
 # Push the results back to codecov
 after_success:

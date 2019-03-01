@@ -62,3 +62,17 @@ class TestNormalizePreferences:
             (("Amy", "Elizabeth"), 1),
             (("Kamala", "Amy", "Elizabeth"), 1),
         }
+
+    def test_from_ballotS(self):
+        schedule = PreferenceSchedule.from_ballots(
+            [
+                ("Kamala", "Elizabeth", "Amy"),
+                ("Kirsten", "Elizabeth"),
+                ("Kamala", "Elizabeth", "Amy"),
+                ("Amy", "Elizabeth", "Kirsten"),
+            ]
+        )
+        assert schedule is not None
+
+    def test_repr(self, schedule):
+        assert repr(schedule) == "<PreferenceSchedule total_votes=8>"
