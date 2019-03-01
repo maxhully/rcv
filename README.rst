@@ -8,8 +8,11 @@ rcv
 .. image:: https://codecov.io/gh/gerrymandr/rcv/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/gerrymandr/rcv
     :alt: Code Coverage
+.. image:: https://readthedocs.org/projects/rcv-py/badge/?version=latest
+    :target: https://rcv-py.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
 
-``rcv`` is a Python library for tabulating ballots from ranked-choice elections.
+rcv is a Python library for tabulating ballots from ranked-choice elections.
 The package is distributed under the BSD 3-Clause License.
 
 Examples
@@ -29,10 +32,3 @@ Examples
     winners = stv.elect()
 
     assert winners == {"Kamala", "Elizabeth"}
-
-
-API Reference
-=============
-
-.. automodule:: rcv
-    :members:
