@@ -1,5 +1,6 @@
 from rcv.sampling import PreferenceSampler, Sampler
 from rcv.ballot import BallotSet
+from rcv.schedule import PreferenceSchedule
 
 import pytest
 
@@ -48,3 +49,7 @@ class TestPreferenceSampler:
     def test_can_sample_with_turnouts(self, sampler):
         schedule = sampler.sample(turnouts={"Precinct 1": 10, "Precinct 2": 15})
         assert schedule.total_votes == 25
+        assert isinstance(schedule, PreferenceSchedule)
+
+    def test_repr(self, sampler):
+        assert repr(sampler) == "<PreferenceSampler units=[Precinct 1, Precinct 2]>"

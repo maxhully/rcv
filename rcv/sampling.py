@@ -30,6 +30,10 @@ class PreferenceSampler(dict):
         """
         super().__init__({unit: Sampler(ballots) for unit, ballots in data.items()})
 
+    def __repr__(self):
+        units = "[" + ", ".join(self.keys()) + "]"
+        return "<PreferenceSampler units={}>".format(units)
+
     def sample(self, turnouts):
         """
         Sample ballots from each unit to produce a :class:`~rcv.PreferenceSchedule`.
