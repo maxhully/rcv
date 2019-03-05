@@ -4,6 +4,11 @@ from itertools import repeat
 from numbers import Number
 import random
 
+try:
+    import numpy
+except ImportError:  # pragma: no cover
+    numpy = None  # pragma: no cover
+
 
 class WeightedSet:
     def __init__(self, weighted_items=None, weight_type=Fraction):
@@ -41,6 +46,12 @@ class WeightedSet:
 
     def sample(self, k):
         items, weights = zip(*self)
+        if numpy is not None:
+            a = numpy.arange(len(items))
+            p = numpy.asarray(weights)
+            p /= numpy.sum(p)
+            indices = numpy.random.choice(a, size=k, p=p)
+            return [items[index] for index in indices]
         return random.choices(items, weights, k=k)
 
     def __iter__(self):

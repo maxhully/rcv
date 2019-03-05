@@ -39,7 +39,7 @@ class PreferenceSampler(dict):
         :returns: a :class:`~rcv.PreferenceSchedule` holding the sampled preferences
         :rtype: rcv.PreferenceSchedule
         """
-        ballots = BallotSet()
+        ballots = BallotSet(weight_type=float)
         for unit, turnout in turnouts.items():
             ballots.update(self[unit] * turnout)
         total_turnout = sum(turnouts.values())

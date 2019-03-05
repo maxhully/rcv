@@ -23,7 +23,10 @@ def data():
             ("hispanic", "nan", "nan"): 2.502,
         },
     }
-    return {key: BallotSet(distribution.items()) for key, distribution in d.items()}
+    return {
+        key: BallotSet(distribution.items(), weight_type=float)
+        for key, distribution in d.items()
+    }
 
 
 @pytest.fixture
