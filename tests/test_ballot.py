@@ -46,3 +46,7 @@ class TestBallotSet:
             "2 * <Ballot (Kamala, Elizabeth, Amy)>"
             "}>"
         )
+
+    def test_has_weight_type_argument(self):
+        weighted_set = BallotSet([(("a",), 40), (("b",), 60)], weight_type=float)
+        assert all(isinstance(weight, float) for item, weight in weighted_set)

@@ -1,4 +1,4 @@
-from rcv.sampling import PreferenceSampler, Sampler
+from rcv.sampling import PreferenceSampler
 from rcv.ballot import BallotSet
 from rcv.schedule import PreferenceSchedule
 
@@ -29,16 +29,6 @@ def data():
 @pytest.fixture
 def sampler(data):
     return PreferenceSampler(data)
-
-
-class TestSampler:
-    def test_can_create_from_ballot_set(self, ballots):
-        sampler = Sampler(ballots)
-        assert sampler
-
-    def test_repr(self):
-        sampler = Sampler([("a", 10), ("b", 5)])
-        assert repr(sampler) == "<Sampler items=['a', 'b'] weights=[10, 5]>"
 
 
 class TestPreferenceSampler:

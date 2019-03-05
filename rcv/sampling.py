@@ -1,18 +1,5 @@
-import random
-
 from .schedule import PreferenceSchedule
-
-
-class Sampler:
-    def __init__(self, weighted_items):
-        self.items = [item for item, weight in weighted_items]
-        self.weights = [weight for item, weight in weighted_items]
-
-    def __repr__(self):
-        return "<Sampler items={} weights={}>".format(self.items, self.weights)
-
-    def sample(self, k):
-        return random.choices(self.items, weights=self.weights, k=k)
+from .ballot import BallotSet
 
 
 class PreferenceSampler(dict):
@@ -28,7 +15,12 @@ class PreferenceSampler(dict):
             to sample from.
         :type data: dict[any, BallotSet]
         """
-        super().__init__({unit: Sampler(ballots) for unit, ballots in data.items()})
+        super().__init__(
+            {
+                unit: BallotSet(ballots, weight_type=float)
+                for unit, ballots in data.items()
+            }
+        )
 
     def __repr__(self):
         units = "[" + ", ".join(str(key) for key in self.keys()) + "]"
@@ -47,8 +39,8 @@ class PreferenceSampler(dict):
         :returns: a :class:`~rcv.PreferenceSchedule` holding the sampled preferences
         :rtype: rcv.PreferenceSchedule
         """
-        return PreferenceSchedule.from_ballots(
-            ballot
-            for unit, turnout in turnouts.items()
-            for ballot in self[unit].sample(turnout)
-        )
+        ballots = BallotSet()
+        for unit, turnout in turnouts.items():
+            ballots.update(self[unit] * turnout)
+        total_turnout = sum(turnouts.values())
+        return PreferenceSchedule.from_ballots(ballots.sample(total_turnout))

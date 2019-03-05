@@ -2,10 +2,12 @@ from collections import defaultdict
 from fractions import Fraction
 from itertools import repeat
 from numbers import Number
+import random
 
 
 class WeightedSet:
-    def __init__(self, weighted_items=None):
+    def __init__(self, weighted_items=None, weight_type=Fraction):
+        self._weight_type = weight_type
         self._weights = defaultdict(int)
         if weighted_items is not None:
             self.update(weighted_items)
@@ -22,16 +24,24 @@ class WeightedSet:
     def is_empty(self):
         return self.total_weight == 0
 
+    @property
+    def total_weight(self):
+        return sum(self._weights.values())
+
+    @property
+    def weight_type(self):
+        return self._weight_type
+
     def add(self, item, weight=1):
-        self._weights[item] += Fraction(weight)
+        self._weights[item] += self.weight_type(weight)
 
     def update(self, items):
         for item, weight in items:
             self.add(item, weight)
 
-    @property
-    def total_weight(self):
-        return sum(self._weights.values())
+    def sample(self, k):
+        items, weights = zip(*self)
+        return random.choices(items, weights, k=k)
 
     def __iter__(self):
         for item, weight in self._weights.items():

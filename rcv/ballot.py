@@ -31,11 +31,13 @@ class Ballot(tuple):
 
 
 class BallotSet(WeightedSet):
-    def __init__(self, weighted_items=None):
+    def __init__(self, weighted_items=None, **kwargs):
         if weighted_items is not None:
-            super().__init__((Ballot(item), weight) for item, weight in weighted_items)
+            super().__init__(
+                ((Ballot(item), weight) for item, weight in weighted_items), **kwargs
+            )
         else:
-            super().__init__()
+            super().__init__(**kwargs)
 
     def eliminate(self, eliminated_candidate):
         return self.__class__(
