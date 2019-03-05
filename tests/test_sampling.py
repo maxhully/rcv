@@ -53,3 +53,7 @@ class TestPreferenceSampler:
 
     def test_repr(self, sampler):
         assert repr(sampler) == "<PreferenceSampler units=[Precinct 1, Precinct 2]>"
+
+    def test_repr_with_int_keys(self):
+        sampler = PreferenceSampler({1: BallotSet()})
+        assert repr(sampler) == "<PreferenceSampler units=[1]>"
