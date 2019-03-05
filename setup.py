@@ -16,7 +16,10 @@ setup(
     url="https://github.com/gerrymandr/rcv",
     packages=find_packages(exclude=("tests",)),
     install_requires=requirements,
-    extras_require={"test": ["pandas", "pytest", "pytest-cov"]},
+    extras_require={
+        "test": ["pandas", "pytest", "pytest-cov"],
+        "sample": ["numpy >= 1.7"],
+    },
     classifiers=[
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",

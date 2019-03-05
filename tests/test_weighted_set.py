@@ -1,6 +1,5 @@
 import pytest
 from rcv.weighted_set import WeightedSet
-from unittest.mock import patch
 
 
 @pytest.fixture
@@ -55,18 +54,3 @@ class TestWeightedSet:
     def test_has_weight_type_argument(self):
         weighted_set = WeightedSet([("a", 40), ("b", 60), ("c", 4)], weight_type=float)
         assert all(isinstance(weight, float) for item, weight in weighted_set)
-
-    def test_can_sample(self):
-        weighted_set = WeightedSet([("a", 40), ("b", 60), ("c", 4)], weight_type=float)
-        result = weighted_set.sample(10)
-        assert isinstance(result, list)
-        assert all(x in {"a", "b", "c"} for x in result)
-
-    def test_without_numpy(self):
-        with patch("rcv.weighted_set.numpy", new=None):
-            weighted_set = WeightedSet(
-                [("a", 40), ("b", 60), ("c", 4)], weight_type=float
-            )
-            result = weighted_set.sample(10)
-            assert isinstance(result, list)
-            assert all(x in {"a", "b", "c"} for x in result)

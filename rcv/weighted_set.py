@@ -2,12 +2,6 @@ from collections import defaultdict
 from fractions import Fraction
 from itertools import repeat
 from numbers import Number
-import random
-
-try:
-    import numpy
-except ImportError:  # pragma: no cover
-    numpy = None  # pragma: no cover
 
 
 class WeightedSet:
@@ -43,16 +37,6 @@ class WeightedSet:
     def update(self, items):
         for item, weight in items:
             self.add(item, weight)
-
-    def sample(self, k):
-        items, weights = zip(*self)
-        if numpy is not None:
-            a = numpy.arange(len(items))
-            p = numpy.asarray(weights)
-            p /= numpy.sum(p)
-            indices = numpy.random.choice(a, size=k, p=p)
-            return [items[index] for index in indices]
-        return random.choices(items, weights, k=k)
 
     def __iter__(self):
         for item, weight in self._weights.items():

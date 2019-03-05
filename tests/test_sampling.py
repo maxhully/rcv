@@ -31,22 +31,20 @@ def data():
 
 @pytest.fixture
 def sampler(data):
-    return PreferenceSampler(data)
+    return PreferenceSampler.from_units(data)
 
 
 class TestPreferenceSampler:
     def test_create_from_data_dictionary(self, data):
-        sampler = PreferenceSampler(data)
-        assert sampler
+        sampler = PreferenceSampler.from_units(data)
+        assert sampler is not None
 
-    def test_can_sample_with_turnouts(self, sampler):
-        schedule = sampler.sample(turnouts={"Precinct 1": 10, "Precinct 2": 15})
+    def test_can_sample_with_turnouts(self, data):
+        schedule = PreferenceSampler.from_units(
+            data, turnouts={"Precinct 1": 10, "Precinct 2": 15}
+        ).sample(25)
         assert schedule.total_votes == 25
         assert isinstance(schedule, PreferenceSchedule)
 
     def test_repr(self, sampler):
-        assert repr(sampler) == "<PreferenceSampler units=[Precinct 1, Precinct 2]>"
-
-    def test_repr_with_int_keys(self):
-        sampler = PreferenceSampler({1: BallotSet()})
-        assert repr(sampler) == "<PreferenceSampler units=[1]>"
+        assert "<PreferenceSampler" in repr(sampler)
