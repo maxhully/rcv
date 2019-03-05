@@ -1,4 +1,4 @@
-from collections import Counter
+from collections import defaultdict
 
 
 def distinguish_duplicates(items):
@@ -12,9 +12,9 @@ def distinguish_duplicates(items):
         ``items`` (starting at 1).
     :rtype: list[str]
     """
-    counter = Counter()
+    counter = defaultdict(int)
     new_items = []
     for item in items:
-        counter.update(item)
+        counter[item] += 1
         new_items.append("{}_{}".format(str(item), str(counter[item])))
     return new_items
