@@ -7,7 +7,7 @@ requirements = []
 
 setup(
     name="rcv",
-    version="0.1.1",
+    version="0.1.2",
     description="Tabulate ballots from ranked-choice elections",
     author="Max Hully",
     author_email="max@mggg.org",
