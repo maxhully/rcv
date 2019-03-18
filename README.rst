@@ -26,12 +26,12 @@ Examples
     from rcv import FractionalSTV, PreferenceSchedule
 
     schedule = PreferenceSchedule.from_ballots([
-        ("Kamala", "Amy", "Elizabeth"),
-        ("Kamala", "Elizabeth", "Amy"),
-        ("Kamala", "Elizabeth", "Amy"),
+        ("A", "B", "C"),
+        ("A", "C", "B"),
+        ("A", "C", "B"),
     ])
 
     stv = FractionalSTV(schedule, seats=2)
     winners = stv.elect()
 
-    assert winners == {"Kamala", "Elizabeth"}
+    assert winners == {"A", "C"}

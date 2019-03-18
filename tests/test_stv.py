@@ -104,3 +104,18 @@ class TestFractionalSTV:
     def test_many_candidates_two_seats(self, real_ballots):
         stv = FractionalSTV(real_ballots, seats=2)
         assert stv.elect() == {"393", "399"}
+
+
+@pytest.fixture
+def abc():
+    return PreferenceSchedule.from_ballots([("a", "b", "c")])
+
+
+class TestSTVEdgeCases:
+    def test_asks_for_too_many_winners(self, abc):
+        with pytest.raises(ValueError):
+            FractionalSTV(abc, seats=10)
+
+    def test_winners_equals_seats(self, abc):
+        stv = FractionalSTV(abc, seats=3)
+        assert stv.elect() == {"a", "b", "c"}

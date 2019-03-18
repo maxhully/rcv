@@ -12,9 +12,8 @@ class PreferenceSampler(dict):
 
     def __init__(self, data):
         """
-        :param data: a dictionary mapping each unit to the :class:`~rcv.BallotSet`
-            to sample from.
-        :type data: :class:`rcv.BallotSet`
+        :param data: the ballots to sample from
+        :type data: :class:`~rcv.BallotSet`
         """
         ballots = BallotSet(data, weight_type=float)
         rankings, weights = zip(*ballots)
@@ -29,8 +28,9 @@ class PreferenceSampler(dict):
     def sample(self, k):
         """
         Sample ballots to produce a :class:`~rcv.PreferenceSchedule`.
+
         :param int k: the number of ballots to sample
-        :returns: a :class:`~rcv.PreferenceSchedule` holding the sampled preferences
+        :return: a :class:`~rcv.PreferenceSchedule` holding the sampled preferences
         :rtype: rcv.PreferenceSchedule
         """
         chosen = numpy.random.choice(self.indices, size=k, p=self.p)

@@ -54,12 +54,20 @@ class FractionalSTV:
 
         if not isinstance(schedule, PreferenceSchedule):
             schedule = PreferenceSchedule(schedule)
-        self.seats = seats
         self.schedule = schedule
+
         if callable(quota):
             self.quota = quota(schedule.total_votes, seats)
         else:
             self.quota = quota
+
+        if seats > len(self.candidates):
+            raise ValueError(
+                "The number of seats requested is greater than "
+                "the number of candidates available to elect."
+            )
+
+        self.seats = seats
         self.elected = set()
 
     @property
@@ -74,7 +82,9 @@ class FractionalSTV:
             candidates.
         :rtype: Set[str]
         """
-        while len(self.elected) < self.seats:
+        if len(self.candidates) == self.seats:
+            return {str(candidate) for candidate in self.candidates}
+        while len(self.elected) < self.seats and len(self.candidates) > 0:
             if len(self.candidates) + len(self.elected) == self.seats:
                 return {
                     str(candidate) for candidate in self.elected.union(self.candidates)

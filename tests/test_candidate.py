@@ -11,8 +11,8 @@ class TestCandidate:
     def test_str_is_name(self, candidate):
         assert str(candidate) == "Amy"
 
-    def test_hash_by_name(self, candidate):
-        assert hash(candidate) == hash("Amy")
+    # def test_hash_by_name(self, candidate):
+    # assert hash(candidate) == hash("Amy")
 
     def test_name_is_str(self):
         assert Candidate(10).name == "10"

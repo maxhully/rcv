@@ -38,9 +38,9 @@ class PreferenceSchedule:
 
     def __init__(self, ballots, candidates=None):
         """
-        :param ballots: the :class:`~rcv.BallotSet` holding all of the valid
-            ballots cast in the election
-        :param candidates: optionally, the :class:`Candidates <~rcv.Candidate>`
+        :param ballots: all of the valid ballots cast in the election
+        :type ballots: :class:`~rcv.BallotSet`
+        :param candidates: optionally, the set of :class:`Candidates <~rcv.Candidate>`
             up for election. If not provided, the candidates will be inferred
             from the names on the ballots.
         """

@@ -9,6 +9,11 @@ import sys
 
 # sys.path.insert(0, os.path.abspath('.'))
 
+try:
+    import mock
+except ImportError:
+    import unittest.mock as mock
+
 # autodoc needs to find our code.
 sys.path.insert(0, os.path.abspath("../"))
 
@@ -164,6 +169,11 @@ autodoc_default_flags = ["members"]
 
 # RTD is unable to install libraries with C dependencies.
 # We're using the mock module to mock those away.
+
+MOCK_MODULES = ["numpy", "pandas"]
+
+for module in MOCK_MODULES:
+    sys.modules[module] = mock.Mock()
 
 # -- Extension configuration -------------------------------------------------
 
