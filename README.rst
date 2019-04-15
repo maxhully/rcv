@@ -2,11 +2,11 @@
 rcv
 ===
 
-.. image:: https://travis-ci.com/gerrymandr/rcv.svg?branch=master
-    :target: https://travis-ci.com/gerrymandr/rcv
+.. image:: https://travis-ci.com/mggg/rcv.svg?branch=master
+    :target: https://travis-ci.com/mggg/rcv
     :alt: Build Status
-.. image:: https://codecov.io/gh/gerrymandr/rcv/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/gerrymandr/rcv
+.. image:: https://codecov.io/gh/mggg/rcv/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/mggg/rcv
     :alt: Code Coverage
 .. image:: https://readthedocs.org/projects/rcv-py/badge/?version=latest
     :target: https://rcv-py.readthedocs.io/en/latest/?badge=latest
