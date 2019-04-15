@@ -15,7 +15,7 @@ rcv
     :target: https://https://pypi.org/project/rcv/
     :alt: PyPI Package
 
-`rcv` is a Python library for tabulating ballots from ranked-choice elections.
+``rcv`` is a Python library for tabulating ballots from ranked-choice elections.
 The package is distributed under the BSD 3-Clause License.
 
 Examples
