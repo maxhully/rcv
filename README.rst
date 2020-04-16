@@ -2,11 +2,11 @@
 rcv
 ===
 
-.. image:: https://travis-ci.com/mggg/rcv.svg?branch=master
-    :target: https://travis-ci.com/mggg/rcv
+.. image:: https://travis-ci.com/maxhully/rcv.svg?branch=master
+    :target: https://travis-ci.com/maxhully/rcv
     :alt: Build Status
-.. image:: https://codecov.io/gh/mggg/rcv/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/mggg/rcv
+.. image:: https://codecov.io/gh/maxhully/rcv/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/maxhully/rcv
     :alt: Code Coverage
 .. image:: https://readthedocs.org/projects/rcv-py/badge/?version=latest
     :target: https://rcv-py.readthedocs.io/en/latest/?badge=latest
